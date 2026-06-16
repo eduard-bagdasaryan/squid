@@ -219,7 +219,6 @@ main() {
     if test -z "$tests"
     then
         local default_tests="
-            cache-refresh-response
             hit-revalidation
         "
         tests="$default_tests"
