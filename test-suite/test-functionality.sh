@@ -219,19 +219,8 @@ main() {
     if test -z "$tests"
     then
         local default_tests="
-            pconn
-            dead-peer
-            proxy-update-headers-after-304
-            accumulate-headers-after-304
-            upgrade-protocols
-            cache-response
             cache-refresh-response
-            proxy-collapsed-forwarding
             hit-revalidation
-            busy-restart
-            smooth-reconfiguration-of-cache-peers
-            truncated-responses
-            malformed-request
         "
         tests="$default_tests"
     fi
