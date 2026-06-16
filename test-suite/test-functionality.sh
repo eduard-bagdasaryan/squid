@@ -199,6 +199,7 @@ run_tests() {
         else
             result=$?
             failed_tests="$failed_tests $testName"
+            break
         fi
     done
 
