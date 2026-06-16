@@ -220,6 +220,15 @@ main() {
     then
         local default_tests="
             hit-revalidation
+            hit-revalidation
+            hit-revalidation
+            hit-revalidation
+            hit-revalidation
+            hit-revalidation
+            hit-revalidation
+            hit-revalidation
+            hit-revalidation
+            hit-revalidation            
         "
         tests="$default_tests"
     fi
