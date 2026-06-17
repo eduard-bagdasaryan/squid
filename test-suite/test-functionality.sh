@@ -220,16 +220,16 @@ main() {
     if test -z "$tests"
     then
         local default_tests="
-            hit-revalidation
-            hit-revalidation
-            hit-revalidation
-            hit-revalidation
-            hit-revalidation
-            hit-revalidation
-            hit-revalidation
-            hit-revalidation
-            hit-revalidation
-            hit-revalidation            
+            cache-refresh-response
+            cache-refresh-response
+            cache-refresh-response
+            cache-refresh-response
+            cache-refresh-response
+            cache-refresh-response
+            cache-refresh-response
+            cache-refresh-response
+            cache-refresh-response
+            cache-refresh-response      
         "
         tests="$default_tests"
     fi
