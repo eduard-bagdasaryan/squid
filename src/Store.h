@@ -278,6 +278,8 @@ public:
     void *operator new(size_t byteCount);
     void operator delete(void *address);
 
+    const cache_key *calcPublicKey(KeyScope) const;
+
     int64_t objectLen() const { return mem().object_sz; }
     int64_t contentLen() const { return objectLen() - mem().baseReply().hdr_sz; }
 
@@ -342,7 +344,6 @@ private:
     bool checkTooBig() const;
     void forcePublicKey(const cache_key *newkey);
     StoreEntry *adjustVary();
-    const cache_key *calcPublicKey(KeyScope) const;
     KeyScope publicKeyScope() const;
 
     /// flags [truncated or too big] entry with ENTRY_BAD_LENGTH and releases it
