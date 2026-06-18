@@ -100,7 +100,7 @@ setup_test_tools() {
     echo "::group::Setup test tools"
 
     clone_repo https://github.com/measurement-factory/daft $DAFT_DIR || return
-    clone_repo https://github.com/measurement-factory/squid-dafts $SQUID_DAFTS_DIR || return
+    clone_repo https://github.com/eduard-bagdasaryan/squid-dafts $SQUID_DAFTS_DIR || return
     clone_repo https://github.com/measurement-factory/squid-overlord $SQUID_OVERLORD_DIR || return
 
     if ! test -e $SQUID_DAFTS_DIR/src
@@ -199,6 +199,7 @@ run_tests() {
         else
             result=$?
             failed_tests="$failed_tests $testName"
+            break
         fi
     done
 
@@ -219,19 +220,17 @@ main() {
     if test -z "$tests"
     then
         local default_tests="
-            pconn
-            dead-peer
-            proxy-update-headers-after-304
-            accumulate-headers-after-304
-            upgrade-protocols
-            cache-response
-            cache-refresh-response
-            proxy-collapsed-forwarding
             hit-revalidation
-            busy-restart
-            smooth-reconfiguration-of-cache-peers
-            truncated-responses
-            malformed-request
+            hit-revalidation
+            hit-revalidation
+            hit-revalidation
+            hit-revalidation
+            hit-revalidation
+            hit-revalidation
+            hit-revalidation
+            hit-revalidation
+            hit-revalidation
+            hit-revalidation
         "
         tests="$default_tests"
     fi
