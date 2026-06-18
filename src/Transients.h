@@ -90,6 +90,9 @@ public:
     /// Can we create and initialize Transients?
     static bool Enabled() { return EntryLimit(); }
 
+    /// refresh the entry index after update
+    void refreshEntry(StoreEntry &e);
+
 private:
     void addEntry(StoreEntry*, const cache_key *, const Store::IoStatus);
     void addWriterEntry(StoreEntry &, const cache_key *);

@@ -428,3 +428,15 @@ TransientsRr::~TransientsRr()
     delete mapOwner;
 }
 
+void
+Transients::refreshEntry(StoreEntry &e)
+{
+    evictCached(e);
+    const auto key = e.calcPublicKey(ksDefault);
+    sfileno index = 0;
+    const auto anchor = map->openForWriting(key, index);
+    if (!anchor)
+        throw TextException("writer collision", Here());
+    map->closeForWriting(index);
+}
+

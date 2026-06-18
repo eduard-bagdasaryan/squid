@@ -125,6 +125,8 @@ public:
     /// whether there are any SMP-aware storages
     static bool SmpAware();
 
+    void updateFinished(StoreEntry &e);
+
     /// the number of cache_dirs being rebuilt; TODO: move to Disks::Rebuilding
     static int store_dirs_rebuilding;
 

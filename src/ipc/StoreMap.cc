@@ -760,6 +760,8 @@ Ipc::StoreMap::closeForUpdating(Update &update)
     closeForReading(update.fresh.fileNo);
     update.fresh = Update::Edition();
 
+    Store::Root().updateFinished(*update.entry);
+
     debugs(54, 5, "closed entry " << updateSaved.stale.fileNo << " of " << *updateSaved.entry <<
            " named " << updateSaved.stale.name << " for updating " << path <<
            " to fresh entry " << updateSaved.fresh.fileNo << " named " << updateSaved.fresh.name <<
