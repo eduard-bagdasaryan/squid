@@ -100,6 +100,7 @@ setup_test_tools() {
     echo "::group::Setup test tools"
 
     clone_repo https://github.com/measurement-factory/daft $DAFT_DIR || return
+    git -C $DAFT_DIR checkout 57915424d2
     clone_repo https://github.com/eduard-bagdasaryan/squid-dafts $SQUID_DAFTS_DIR || return
     clone_repo https://github.com/measurement-factory/squid-overlord $SQUID_OVERLORD_DIR || return
 
