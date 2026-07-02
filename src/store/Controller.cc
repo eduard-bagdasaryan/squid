@@ -922,7 +922,7 @@ void
 Store::Controller::updateFinished(StoreEntry &e)
 {
     if (e.hasTransients()) {
-        transients->evictCached();
+        transients->evictCached(e);
         transients->forgetMarkedEntry(e);
     }
 }
