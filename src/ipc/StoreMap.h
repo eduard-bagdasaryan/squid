@@ -278,6 +278,8 @@ public:
     /// undoes partial update, unlocks, and cleans up
     void abortUpdating(Update &update);
 
+    bool replaceFileNo(const cache_key *const key);
+
     /// the caller must hold a lock on the entry
     /// \returns nullptr unless the slice is readable
     const Anchor *peekAtReader(const sfileno fileno) const;

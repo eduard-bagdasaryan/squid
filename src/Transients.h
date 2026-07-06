@@ -57,6 +57,8 @@ public:
     /// the caller is done writing or reading the given entry
     void disconnect(StoreEntry &);
 
+    void update(StoreEntry &);
+
     /* Store API */
     StoreEntry *get(const cache_key *) override;
     void create() override {}

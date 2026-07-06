@@ -373,6 +373,61 @@ Ipc::StoreMap::abortUpdating(Update &update)
     debugs(54, 5, "aborted entry " << fileno << " for updating " << path);
 }
 
+bool
+Ipc::StoreMap::replaceFileNo(const cache_key *const key)
+{
+	  const auto name = nameByKey(key);
+	  const int currentIdx = fileNoByName(name);
+
+	  const auto staleAnchor = openForReadingAt(currentIdx, key);
+	  if (!staleAnchor) {
+		  debugs(54, 5, "cannot open unreadable entry " << currentIdx << " for reading " << path);
+		  return false;
+	  }
+
+      debugs(54, 5, "replacing stale entry " << currentIdx << " to write " << path);
+
+	  Update::Edition available;
+	  if (!openKeyless(available)) { // XXX: debugs() will say "for updating"
+	      debugs(54, 5, "no anchors to replace stale entry " << currentIdx << " to write " << path);
+	      closeForReading(currentIdx);
+	      return false;
+	  }
+
+	  if (!staleAnchor->lock.lockHeaders()) {
+	      debugs(54, 5, "no access to replace stale entry " << currentIdx << " to write " << path);
+	      abortWriting(available.fileNo);
+	      closeForReading(currentIdx);
+	      return false;
+	  }
+
+	  // fileNos[name] may have been updated many times before our lockHeaders(),
+	  // including ABA-like updates that restore the same index value, but we do
+	  // not care about past updates as long as the now-locked fileNos[name] value
+	  // currently points to the previously locked stale entry (i.e. that the swap
+	  // below swaps two locked fileNos entries).
+	  if (fileNoByName(name) != currentIdx) {
+	      debugs(54, 5, "somebody else replaced stale entry " << currentIdx << " to write " << path);
+	      abortWriting(available.fileNo);
+	      staleAnchor->lock.unlockHeaders();
+	      closeForReading(currentIdx);
+	      return false;
+	  }
+
+	    // swap anchor "pointers": fileNos[name] <-> fileNos[available.name]
+	  relocate(name, available.fileNo);
+	  relocate(available.name, currentIdx);
+
+	  staleAnchor->lock.unlockHeaders();
+	  closeForReading(currentIdx);
+      closeForWriting(available.fileNo);
+
+	  debugs(54, 5, "replaced stale entry " << currentIdx << " under name " << name << " with fresh entry " <<
+	         available.fileNo << " under name " << available.name << " in " << path);
+
+    return true;
+}
+
 const Ipc::StoreMap::Anchor *
 Ipc::StoreMap::peekAtReader(const sfileno fileno) const
 {
@@ -756,6 +811,8 @@ Ipc::StoreMap::closeForUpdating(Update &update)
     else
         Must(freshSplicingSlice.next == suffixStart);
     // either way, fresh chain uses the stale chain suffix now
+
+    Store::Root().transientsUpdate(*update.entry);
 
     // make the fresh anchor/chain readable for everybody
     update.fresh.anchor->lock.switchExclusiveToShared();
@@ -1223,7 +1280,7 @@ Ipc::StoreMapAnchor::rewind()
     splicingPoint = -1;
     memset(&key, 0, sizeof(key));
     basics.clear();
-    waitingToBeFreed = false;
+   // waitingToBeFreed = false;
     // no freeingCheckpoint() here because we are only called for a locked entry
     writerHalted = false;
     // but keep the lock

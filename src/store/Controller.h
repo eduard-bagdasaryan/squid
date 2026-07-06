@@ -116,6 +116,8 @@ public:
     /// disassociates the entry from the intransit table
     void transientsDisconnect(StoreEntry &);
 
+    void transientsUpdate(StoreEntry &);
+
     /// disassociates the entry from the memory cache, preserving cached data
     void memoryDisconnect(StoreEntry &);
 
