@@ -421,6 +421,7 @@ Ipc::StoreMap::replaceFileNo(const cache_key *const key)
 	  staleAnchor->lock.unlockHeaders();
 	  closeForReading(currentIdx);
       closeForWriting(available.fileNo);
+      freeEntry(currentIdx);
 
 	  debugs(54, 5, "replaced stale entry " << currentIdx << " under name " << name << " with fresh entry " <<
 	         available.fileNo << " under name " << available.name << " in " << path);
