@@ -99,9 +99,9 @@ start_overlord() {
 setup_test_tools() {
     echo "::group::Setup test tools"
 
-    clone_repo https://github.com/measurement-factory/daft $DAFT_DIR || return
+    clone_repo https://github.com/eduard-bagdasaryan/daft $DAFT_DIR || return
     clone_repo https://github.com/eduard-bagdasaryan/squid-dafts $SQUID_DAFTS_DIR || return
-    clone_repo https://github.com/measurement-factory/squid-overlord $SQUID_OVERLORD_DIR || return
+    clone_repo https://github.com/eduard-bagdasaryan/squid-overlord $SQUID_OVERLORD_DIR || return
 
     if ! test -e $SQUID_DAFTS_DIR/src
     then
