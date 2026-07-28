@@ -466,7 +466,7 @@ Store::Controller::accumulateMore(StoreEntry &entry) const
     // The memory cache should not influence for-swapout accumulation decision.
 }
 
-// Must be called from StoreEntry::release() or releaseRequest() because
+// Must be called from StoreEntry::release() or setPrivateKey() because
 // those methods currently manage local indexing of StoreEntry objects.
 // TODO: Replace StoreEntry::release*() with Root().evictCached().
 void
@@ -487,8 +487,7 @@ Store::Controller::evictIfFound(const cache_key *key)
     if (StoreEntry *entry = peekAtLocal(key)) {
         debugs(20, 5, "marking local in-transit " << *entry);
         assert(entry->publicKey()); // release() below must cover unattached Stores
-        entry->release(true);
-        return;
+        entry->hideFromNewcomers();
     }
 
     if (sharedMemStore)
